@@ -180,4 +180,4 @@ Improvements are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE) © 2026 K. Sivasarathy
+[MIT](LICENSE) © 2026 
