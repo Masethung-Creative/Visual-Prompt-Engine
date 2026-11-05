@@ -1,0 +1,31 @@
+name: Release
+
+# Push a tag like v1.0.1 and this builds visual-prompt-engine.skill
+# and publishes it as a GitHub Release automatically.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build .skill package
+        run: |
+          cd plugins/visual-prompt-engine/skills
+          zip -r "$GITHUB_WORKSPACE/visual-prompt-engine.skill" visual-prompt-engine
+          cd "$GITHUB_WORKSPACE"
+          cp visual-prompt-engine.skill visual-prompt-engine.zip
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            visual-prompt-engine.skill visual-prompt-engine.zip \
+            --title "$GITHUB_REF_NAME" --generate-notes

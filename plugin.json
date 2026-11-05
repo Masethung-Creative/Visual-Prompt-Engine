@@ -1,0 +1,10 @@
+{
+  "name": "visual-prompt-engine",
+  "description": "Deterministic cinematographic prompt engine: 8-slot syntax matrix, emotion-to-optics dictionary, negatives, continuity locks and ControlNet recipes for AI image and video generation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "K. Sivasarathy"
+  },
+  "license": "MIT",
+  "keywords": ["prompt-engineering", "midjourney", "stable-diffusion", "flux", "ai-video", "cinematography"]
+}

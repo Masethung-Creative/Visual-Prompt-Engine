@@ -1,0 +1,20 @@
+{
+  "name": "visual-prompt-engine",
+  "owner": {
+    "name": "K. Sivasarathy"
+  },
+  "metadata": {
+    "description": "Cinematographic image and video prompt engineering skills for Claude",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "visual-prompt-engine",
+      "source": "./plugins/visual-prompt-engine",
+      "description": "Turns a scene idea or emotion into precise camera, lens and lighting telemetry prompts for Midjourney, Stable Diffusion, Flux, DALL-E, Imagen and AI video tools.",
+      "version": "1.0.0",
+      "category": "creative",
+      "keywords": ["prompt-engineering", "midjourney", "stable-diffusion", "flux", "ai-video", "cinematography"]
+    }
+  ]
+}

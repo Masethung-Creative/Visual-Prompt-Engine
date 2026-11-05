@@ -1,0 +1,46 @@
+name: Validate
+
+# Runs on every push and pull request to catch broken structure early.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check skill structure
+        run: |
+          S=plugins/visual-prompt-engine/skills/visual-prompt-engine/SKILL.md
+          test -f "$S" || { echo "SKILL.md missing"; exit 1; }
+          head -1 "$S" | grep -qx -- '---' || { echo "SKILL.md must start with YAML frontmatter"; exit 1; }
+          grep -q '^name: visual-prompt-engine$' "$S" || { echo "name field must be visual-prompt-engine"; exit 1; }
+          grep -q '^description: ' "$S" || { echo "description field missing"; exit 1; }
+
+      - name: Check JSON manifests
+        run: |
+          jq empty .claude-plugin/marketplace.json
+          jq empty plugins/visual-prompt-engine/.claude-plugin/plugin.json
+          M=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          P=$(jq -r '.version' plugins/visual-prompt-engine/.claude-plugin/plugin.json)
+          [ "$M" = "$P" ] || { echo "Version mismatch: marketplace $M vs plugin $P"; exit 1; }
+
+      - name: Check installers
+        shell: bash
+        run: |
+          bash -n install.sh
+          T=$(mktemp -d); HOME=$T ./install.sh --agent all
+          test -f "$T/.claude/skills/visual-prompt-engine/SKILL.md"
+
+  validate-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test PowerShell installer
+        shell: pwsh
+        run: |
+          & ./install.ps1 -Agent claude -Project
+          if (-not (Test-Path ".claude/skills/visual-prompt-engine/SKILL.md")) { throw "PowerShell install failed" }
